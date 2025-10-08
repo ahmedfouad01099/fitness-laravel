@@ -4,24 +4,35 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePostsTable extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table){
             $table->id();
+            $table->string('title')->nullable();
+            $table->text('tags_id')->nullable();
+            $table->text('category_ids')->nullable();
+            $table->datetime('datetime')->nullable();
+            $table->string('status')->nullable()->default('draft');
+            $table->string('is_featured')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('posts');
     }
-};
+}

@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('workout_days', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('workout_id')->nullable();
+            $table->bigInteger('sequence')->nullable();
+            $table->boolean('is_rest')->default(0)->comment('0-no,1-yes')->nullable();
+            $table->foreign('workout_id')->references('id')->on('workouts')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('workout_days');
     }
 };
