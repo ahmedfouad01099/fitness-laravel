@@ -1,5 +1,23 @@
 <?php
 
+use App\Models\AppSetting;
+
+function appSettingData($type = 'get')
+{
+    if (Session::get('setting_data') == '') {
+        $type = 'set';
+    }
+    switch ($type) {
+        case 'set':
+            $settings = AppSetting::first();
+            Session::put('setting_data', $settings);
+            break;
+        default:
+            break;
+    }
+    return Session::get('setting_data');
+}
+
 function getSingleMedia($model, $collection = 'image_icon', $skip = true)
 {
     if (!Auth::check() && $skip) {
@@ -40,4 +58,9 @@ function getSingleMedia($model, $collection = 'image_icon', $skip = true)
         }
         return $media;
     }
+}
+
+function mighty_language_direction()
+{
+    return 'ltr'; // Default to left-to-right
 }
