@@ -26,10 +26,16 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
 });
 //Auth pages Routs
 Route::group(['prefix' => 'auth'], function () {
-    Route::get('signin', [HomeController::class, 'signin'])->name('auth.signin');
-    Route::get('signup', [HomeController::class, 'signup'])->name('auth.signup');
-    Route::get('confirmmail', [HomeController::class, 'confirmmail'])->name('auth.confirmmail');
-    Route::get('lockscreen', [HomeController::class, 'lockscreen'])->name('auth.lockscreen');
-    Route::get('recover-password', [HomeController::class, 'recoverpw'])->name('auth.recover-password');
-    Route::get('userprivacysetting', [HomeController::class, 'userprivacysetting'])->name('auth.userprivacysetting');
+    Route::get('signin', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])->name('auth.signin');
+    Route::get('signup', [App\Http\Controllers\Auth\RegisteredUserController::class, 'create'])->name('auth.signup');
+    Route::get('confirmmail', function () {
+        return view('auth.confirm-mail');
+    })->name('auth.confirmmail');
+    Route::get('lockscreen', function () {
+        return view('auth.lockscreen');
+    })->name('auth.lockscreen');
+    Route::get('recover-password', [App\Http\Controllers\Auth\PasswordResetLinkController::class, 'create'])->name('auth.recover-password');
+    Route::get('userprivacysetting', function () {
+        return view('auth.user-privacy-setting');
+    })->name('auth.userprivacysetting');
 });

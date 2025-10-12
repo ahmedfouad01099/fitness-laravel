@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register middleware alias for Laravel 12
+        $this->app->alias(\App\Http\Middleware\UserActive::class, 'useractive');
     }
 
     /**
