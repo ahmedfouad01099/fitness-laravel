@@ -14479,6 +14479,20 @@ thead, tbody, tfoot, tr, td, th{
 .sidebar-default .navbar-nav .nav-item .sub-nav {
   list-style: none;
   padding: 0;
+  display: none;
+}
+
+.sidebar-default .navbar-nav .nav-item .sub-nav.show {
+  display: block;
+}
+
+.sidebar-default .navbar-nav .nav-item .nav-link.collapsed {
+  background-color: rgba(213, 223, 85, 0.1);
+  color: #000;
+}
+
+.sidebar-default .navbar-nav .nav-item .nav-link.collapsed .right-icon {
+  transform: rotate(90deg);
 }
 
 .sidebar .sidebar-toggle {

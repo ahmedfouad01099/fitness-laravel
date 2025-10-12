@@ -482,6 +482,58 @@ if (document.querySelector('#navbarSideCollapse'))  {
 }
 
 /*---------------------------------------------------------------------
+Dropdown Menu Toggle
+-----------------------------------------------------------------------*/
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle dropdown menu toggles
+  const dropdownToggles = document.querySelectorAll('.nav-link[href^="#"]');
+  
+  dropdownToggles.forEach(function(toggle) {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const parentLi = this.closest('li');
+      const submenu = parentLi.querySelector('ul');
+      
+      if (submenu) {
+        // Toggle the dropdown
+        const isOpen = submenu.classList.contains('show');
+        
+        // Close all other dropdowns
+        document.querySelectorAll('.iq-main-menu ul.show').forEach(function(menu) {
+          menu.classList.remove('show');
+        });
+        
+        document.querySelectorAll('.iq-main-menu .nav-link.collapsed').forEach(function(link) {
+          link.classList.remove('collapsed');
+          link.setAttribute('aria-expanded', 'false');
+        });
+        
+        if (!isOpen) {
+          submenu.classList.add('show');
+          this.classList.add('collapsed');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      }
+    });
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.iq-main-menu')) {
+      document.querySelectorAll('.iq-main-menu ul.show').forEach(function(menu) {
+        menu.classList.remove('show');
+      });
+      
+      document.querySelectorAll('.iq-main-menu .nav-link.collapsed').forEach(function(link) {
+        link.classList.remove('collapsed');
+        link.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+});
+
+/*---------------------------------------------------------------------
 Form Validation
 -----------------------------------------------------------------------*/
 
