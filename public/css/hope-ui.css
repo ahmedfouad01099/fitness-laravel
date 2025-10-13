@@ -14487,12 +14487,43 @@ thead, tbody, tfoot, tr, td, th{
 }
 
 .sidebar-default .navbar-nav .nav-item .nav-link.collapsed {
-  background-color: rgba(213, 223, 85, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   color: #000;
 }
 
 .sidebar-default .navbar-nav .nav-item .nav-link.collapsed .right-icon {
   transform: rotate(90deg);
+}
+
+/* Modal and Offcanvas Close Button Fixes */
+.btn-close {
+  position: relative;
+  z-index: 1050;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.btn-close:hover {
+  opacity: 0.8;
+}
+
+.btn-close:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(213, 223, 85, 0.25);
+}
+
+/* Ensure modals and offcanvas can be closed */
+.modal.show,
+.offcanvas.show {
+  z-index: 1055;
+}
+
+.screen-darken {
+  z-index: 1050;
+}
+
+.screen-darken.active {
+  z-index: 1050;
 }
 
 .sidebar .sidebar-toggle {
