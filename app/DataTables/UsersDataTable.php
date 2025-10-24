@@ -5,99 +5,94 @@ namespace App\DataTables;
 use App\Models\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\DataTableAbstract as DataTable;
+use Yajra\DataTables\Services\DataTable;
 use App\Traits\DataTableTrait;
 
 class UsersDataTable extends DataTable
 {
-    use DataTableTrait;%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
-    }
+    use DataTableTrait;
     /**
-     * Resolve callback parameter instance.
+     * Build DataTable class.
      *
-     * @return mixed
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
      */
-    protected function resolveCallbackParameter()
+    public function dataTable($query)
     {
-        return $this->query();
+        return datatables()
+            ->eloquent($query)
+            ->editColumn('userProfile.age', function($query) {
+                return $query->userProfile->age ?? '-';
+            })
+            
+            ->editColumn('status', function($query) {
+                $status = 'warning';
+                switch ($query->status) {
+                    case 'active':
+                        $status = 'primary';
+                        break;
+                    case 'inactive':
+                        $status = 'danger';
+                        break;
+                    case 'banned':
+                        $status = 'dark';
+                        break;
+                }
+                return '<span class="text-capitalize badge bg-'.$status.'">'.$query->status.'</span>';
+            })
+            ->filterColumn('userProfile.age', function($query, $keyword) {
+                return $query->orWhereHas('userProfile', function($q) use($keyword) {
+                    $q->where('age', 'like', "%{$keyword}%");
+                });
+            })
+            ->addColumn('action', 'users.action')
+            ->rawColumns(['action','status']);
     }
 
     /**
-     * Perform default query orderBy clause.
-     */
-    protected function defaultOrdering(): void
-    {
-        $this->orderBy('id', 'desc');
-    }
-
-    /**
-     * Perform global search.
+     * Get query source of dataTable.
      *
-     * @param string $keyword
+     * @param \App\Models\User $model
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function globalSearch(string $keyword): void
+    public function query()
     {
-        $this->where(function ($query) use ($keyword) {
-            $query->where('title', 'like', "%" . $keyword . "%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
+        $model = User::whereNotIn('user_type', ['admin'])->with('userProfile');
+        return $this->applyScopes($model);
     }
 
     /**
-     * Get results.
+     * Get columns.
+     *
+     * @return array
      */
-    public function results(): \Illuminate\Support\Collection
+    protected function getColumns()
     {
-        return $this->get();
+        return [
+            ['data' => 'id', 'name' => 'id', 'title' =>  __('message.id')],
+            ['data' => 'display_name', 'name' => 'display_name', 'title' => __('message.name')],
+            ['data' => 'phone_number', 'name' => 'phone_number', 'title' => __('message.phone_number')],
+            ['data' => 'email', 'name' => 'email', 'title' => __('message.email')],
+            ['data' => 'userProfile.age', 'name' => 'userProfile.age', 'title' => __('message.age'), 'orderable' => false],
+            ['data' => 'status', 'name' => 'status', 'title' => __('message.status')], 
+
+            Column::computed('action')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->title(__('message.action'))
+                  ->searchable(false)
+                  ->width(60)
+                  ->addClass('text-center hide-search'),
+        ];
     }
 
     /**
-     * Count results.
+     * Get filename for export.
+     *
+     * @return string
      */
-    public function count(): int
+    protected function filename(): string
     {
-        return $this->get()->count();
+        return 'Users_' . date('YmdHis');
     }
-
-    /**
-     * Count total items.
-     */
-    public function totalCount(): int
-    {
-        return $this->query()->count();
-    }
-
-    /**
-     * Perform filtering.
-     */
-    public function filtering(): void
-    {
-        // Implement custom filtering if needed
-    }
-
-    /**
-     * Perform column search.
-     */
-    public function columnSearch(): void
-    {
-        // Implement column-specific search if needed
-    }
-
-    /**
-     * Perform pagination.
-     */
-    public function paging(): void
-    {
-        // Implement custom pagination if needed
-    }
-
-    /**
-     * Perform sorting of columns.
-     */
-    public function ordering(): void
-    {
-        // Implement custom ordering if needed
-    }
-}    public function make(bool $mDataSupport = true): \Illuminate\Http\JsonResponse { return $this->dataTable($this->query()); }
+}

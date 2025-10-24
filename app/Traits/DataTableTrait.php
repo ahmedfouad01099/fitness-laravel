@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\DataTableAbstract as DataTable;
 
 trait DataTableTrait {
 
@@ -20,7 +20,7 @@ trait DataTableTrait {
     }
 
 
-    public function getBuilderParameters()
+    public function getBuilderParameters(): array
     {
         return [
             'lengthMenu'    => [[10, 50, 100, 500, -1], [10, 50, 100, 500, __('pagination.all')]],

@@ -5,99 +5,72 @@ namespace App\DataTables;
 use App\Models\Tags;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\DataTableAbstract as DataTable;
+use Yajra\DataTables\Services\DataTable;
 use App\Traits\DataTableTrait;
 
 class TagsDataTable extends DataTable
 {
-    use DataTableTrait;%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
-    }
+    use DataTableTrait;
     /**
-     * Resolve callback parameter instance.
+     * Build DataTable class.
      *
-     * @return mixed
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
      */
-    protected function resolveCallbackParameter()
+    public function dataTable($query)
     {
-        return $this->query();
+        return datatables()
+            ->eloquent($query)
+
+            ->addColumn('action', function($tags){
+                $id = $tags->id;
+                return view('tags.action',compact('tags','id'))->render();
+            })
+            ->addIndexColumn()
+            ->rawColumns(['action','status']);
     }
 
     /**
-     * Perform default query orderBy clause.
-     */
-    protected function defaultOrdering(): void
-    {
-        $this->orderBy('id', 'desc');
-    }
-
-    /**
-     * Perform global search.
+     * Get query source of dataTable.
      *
-     * @param string $keyword
+     * @param \App\Models\Tags $model
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function globalSearch(string $keyword): void
+    public function query(Tags $model)
     {
-        $this->where(function ($query) use ($keyword) {
-            $query->where('title', 'like', "%" . $keyword . "%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
+        return $model->newQuery();
+    }
+
+
+    /**
+     * Get columns.
+     *
+     * @return array
+     */
+    protected function getColumns()
+    {
+        return [
+            Column::make('DT_RowIndex')
+                ->searchable(false)
+                ->title(__('message.srno'))
+                ->orderable(false),
+            ['data' => 'title', 'name' => 'title', 'title' => __('message.title')],
+            Column::computed('action')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->title(__('message.action'))
+                  ->width(60)
+                  ->addClass('text-center hide-search'),
+        ];
     }
 
     /**
-     * Get results.
+     * Get filename for export.
+     *
+     * @return string
      */
-    public function results(): \Illuminate\Support\Collection
+    protected function filename(): string
     {
-        return $this->get();
+        return 'Tags' . date('YmdHis');
     }
-
-    /**
-     * Count results.
-     */
-    public function count(): int
-    {
-        return $this->get()->count();
-    }
-
-    /**
-     * Count total items.
-     */
-    public function totalCount(): int
-    {
-        return $this->query()->count();
-    }
-
-    /**
-     * Perform filtering.
-     */
-    public function filtering(): void
-    {
-        // Implement custom filtering if needed
-    }
-
-    /**
-     * Perform column search.
-     */
-    public function columnSearch(): void
-    {
-        // Implement column-specific search if needed
-    }
-
-    /**
-     * Perform pagination.
-     */
-    public function paging(): void
-    {
-        // Implement custom pagination if needed
-    }
-
-    /**
-     * Perform sorting of columns.
-     */
-    public function ordering(): void
-    {
-        // Implement custom ordering if needed
-    }
-}    public function make(bool $mDataSupport = true): \Illuminate\Http\JsonResponse { return $this->dataTable($this->query()); }
+}

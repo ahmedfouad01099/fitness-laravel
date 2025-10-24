@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\Post;
+use App\Models\Role;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
 use App\Traits\DataTableTrait;
 
-class PostDataTable extends DataTable
+class RoleDataTable extends DataTable
 {
     use DataTableTrait;
     /**
@@ -22,36 +22,22 @@ class PostDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-
-            ->editColumn('status', function($query) {
-                $status = 'warning';
-                switch ($query->status) {
-                    case 'publish':
-                        $status = 'primary';
-                        break;
-                    case 'draft':
-                        $status = 'warning';
-                        break;
-                }
-                return '<span class="text-capitalize badge bg-'.$status.'">'.$query->status.'</span>';
-            })
-            ->addColumn('action', function($post){
-                $id = $post->id;
-                return view('post.action',compact('post','id'))->render();
+            ->addColumn('action', function($role){
+                return view('role.action',compact('role'))->render();
             })
             ->addIndexColumn()
-            ->rawColumns(['action','status']);
+            ->rawColumns(['action']);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Post $model
+     * @param \App\Models\Role $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Post $model)
+    public function query(Role $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->whereNotIn('name',['admin']);
     }
 
     /**
@@ -66,10 +52,7 @@ class PostDataTable extends DataTable
                 ->searchable(false)
                 ->title(__('message.srno'))
                 ->orderable(false),
-            ['data' => 'title', 'name' => 'title', 'title' => __('message.title')],            
-            ['data' => 'datetime', 'name' => 'datetime', 'title' => __('message.datetime')],
-            ['data' => 'is_featured', 'name' => 'is_featured', 'title' => __('message.featured')],
-            ['data' => 'status', 'name' => 'status', 'title' => __('message.status')],
+            ['data' => 'name', 'name' => 'name', 'title' => __('message.name'), 'orderable' => false],
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -86,6 +69,6 @@ class PostDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Post' . date('YmdHis');
+        return 'Role_' . date('YmdHis');
     }
 }

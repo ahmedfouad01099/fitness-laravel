@@ -2,13 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\Quotes;
+use App\Models\PushNotification;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Editor\Editor;
+use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+
 use App\Traits\DataTableTrait;
 
-class QuotesDataTable extends DataTable
+class PushNotificationDataTable extends DataTable
 {
     use DataTableTrait;
     /**
@@ -21,26 +24,26 @@ class QuotesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-
-            ->addColumn('action', function($quotes){
-                $id = $quotes->id;
-                return view('quotes.action',compact('quotes','id'))->render();
+           
+            ->editColumn('message', function($row) {
+                return isset($row->message) ? stringLong($row->message, 'desc') : null;
             })
             ->addIndexColumn()
-            ->rawColumns(['action','status']);
+            ->addColumn('action', 'push_notification.action')
+            ->rawColumns([ 'action' ]);
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Quotes $model
+     * @param \App\Models\PushNotification $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Quotes $model)
+    public function query()
     {
-        return $model->newQuery();
+        $model = PushNotification::query();
+        return $this->applyScopes($model);
     }
-
 
     /**
      * Get columns.
@@ -53,16 +56,16 @@ class QuotesDataTable extends DataTable
             Column::make('DT_RowIndex')
                 ->searchable(false)
                 ->title(__('message.srno'))
-                ->orderable(false),
-            ['data' => 'title', 'name' => 'title', 'title' => __('message.title')],
-            ['data' => 'date', 'name' => 'date', 'title' => __('message.date')],
-            ['data' => 'message', 'name' => 'message', 'title' => __('message.message')],
+                ->orderable(false)
+                ->width(60),
+            Column::make('title')->title( __('message.title') ),
+            Column::make('message')->title( __('message.message') ),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
                   ->title(__('message.action'))
                   ->width(60)
-                  ->addClass('text-center hide-search'),
+                  ->addClass('text-center'),
         ];
     }
 
@@ -71,8 +74,8 @@ class QuotesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename(): string
+    protected function filename()
     {
-        return 'Quotes' . date('YmdHis');
+        return 'PushNotifications_' . date('YmdHis');
     }
 }

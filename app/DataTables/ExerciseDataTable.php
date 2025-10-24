@@ -7,100 +7,106 @@ use App\Models\Equipment;
 use App\Models\Level;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\DataTableAbstract as DataTable;
+use Yajra\DataTables\Services\DataTable;
 
 use App\Traits\DataTableTrait;
 
 class ExerciseDataTable extends DataTable
 {
-    use DataTableTrait;%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
-    }
+    use DataTableTrait;
     /**
-     * Resolve callback parameter instance.
+     * Build DataTable class.
      *
-     * @return mixed
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
      */
-    protected function resolveCallbackParameter()
+    public function dataTable($query)
     {
-        return $this->query();
+        return datatables()
+            ->eloquent($query)
+
+            ->editColumn('status', function($query) {
+                $status = 'warning';
+                switch ($query->status) {
+                    case 'active':
+                        $status = 'primary';
+                        break;
+                    case 'inactive':
+                        $status = 'warning';
+                        break;
+                }
+                return '<span class="text-capitalize badge bg-'.$status.'">'.$query->status.'</span>';
+            })
+            ->editColumn('equipment.title', function($query) {
+                return optional($query->equipment)->title ?? '-';
+            })
+            ->filterColumn('equipment.title', function($query, $keyword) {
+                return $query->orWhereHas('equipment', function($q) use($keyword) {
+                    $q->where('title', 'like', "%{$keyword}%");
+                });
+            })
+
+            ->editColumn('level.title', function($query) {
+                return optional($query->level)->title ?? '-';
+            })
+            ->filterColumn('level.title', function($query, $keyword) {
+                return $query->orWhereHas('level', function($q) use($keyword) {
+                    $q->where('title', 'like', "%{$keyword}%");
+                });
+            })
+
+            ->addColumn('action', function($exercise){
+                $id = $exercise->id;
+                return view('exercise.action',compact('exercise','id'))->render();
+            })
+            ->addIndexColumn()
+            ->rawColumns(['action','status']);
     }
 
     /**
-     * Perform default query orderBy clause.
-     */
-    protected function defaultOrdering(): void
-    {
-        $this->orderBy('id', 'desc');
-    }
-
-    /**
-     * Perform global search.
+     * Get query source of dataTable.
      *
-     * @param string $keyword
+     * @param \App\Models\Exercise $model
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function globalSearch(string $keyword): void
+    public function query(Exercise $model)
     {
-        $this->where(function ($query) use ($keyword) {
-            $query->where('title', 'like', "%" . $keyword . "%")
-                  ->orWhere('status', 'like', "%" . $keyword . "%");
-        });
+        $model = Exercise::query()->with('equipment','level');
+        return $this->applyScopes($model);
     }
 
     /**
-     * Get results.
+     * Get columns.
+     *
+     * @return array
      */
-    public function results(): \Illuminate\Support\Collection
+    protected function getColumns()
     {
-        return $this->get();
+        return [
+            Column::make('DT_RowIndex')
+                ->searchable(false)
+                ->title(__('message.srno'))
+                ->orderable(false),
+            ['data' => 'title', 'name' => 'title', 'title' => __('message.title')],   
+            ['data' => 'equipment.title', 'name' => 'equipment.title', 'title' => __('message.equipment'), 'orderable' => false], 
+            ['data' => 'level.title', 'name' => 'level.title', 'title' => __('message.level'), 'orderable' => false],   
+            ['data' => 'status', 'name' => 'status', 'title' => __('message.status')],
+            Column::computed('action')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->title(__('message.action'))
+                  ->width(60)
+                  ->addClass('text-center hide-search'),
+        ];
     }
 
     /**
-     * Count results.
+     * Get filename for export.
+     *
+     * @return string
      */
-    public function count(): int
+    protected function filename(): string
     {
-        return $this->get()->count();
+        return 'Exercise' . date('YmdHis');
     }
-
-    /**
-     * Count total items.
-     */
-    public function totalCount(): int
-    {
-        return $this->query()->count();
-    }
-
-    /**
-     * Perform filtering.
-     */
-    public function filtering(): void
-    {
-        // Implement custom filtering if needed
-    }
-
-    /**
-     * Perform column search.
-     */
-    public function columnSearch(): void
-    {
-        // Implement column-specific search if needed
-    }
-
-    /**
-     * Perform pagination.
-     */
-    public function paging(): void
-    {
-        // Implement custom pagination if needed
-    }
-
-    /**
-     * Perform sorting of columns.
-     */
-    public function ordering(): void
-    {
-        // Implement custom ordering if needed
-    }
-}    public function make(bool $mDataSupport = true): \Illuminate\Http\JsonResponse { return $this->dataTable($this->query()); }
+}
