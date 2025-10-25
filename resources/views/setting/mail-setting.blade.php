@@ -1,10 +1,11 @@
-{{ Form::open(['method' => 'POST','route' => ['envSetting'],'data-toggle'=>'validator']) }}
+<form action="{{ route('envSetting') }}" method="POST" data-toggle="validator">
+    @csrf
     <div class="col-md-12 mt-20">
         <div class="row">
 
-        {{ Form::hidden('id', null, ['class' => 'form-control'] ) }}
-        {{ Form::hidden('page', $page, ['class' => 'form-control'] ) }}
-        {{ Form::hidden('type', 'mail', ['class' => 'form-control'] ) }}
+        <input type="hidden" name="id" value="{{ $setting_value->id ?? '' }}" class="form-control">
+        <input type="hidden" name="page" value="{{ $page }}" class="form-control">
+        <input type="hidden" name="type" value="mail" class="form-control">
             @foreach(config('constant.MAIL_SETTING') as $key => $value)
                 <div class="col-md-6">
                     <div class="form-group">
@@ -20,5 +21,5 @@
         </div>
     </div>
 <hr>
-{{ Form::submit(__('message.save'), ['class' => 'btn btn-md btn-primary float-md-end' ]) }}
-{{ Form::close() }}
+<button type="submit" class="btn btn-md btn-primary float-md-end">{{ __('message.save') }}</button>
+</form>

@@ -59,7 +59,9 @@ class UserController extends Controller
         $request['display_name'] = $request['first_name']." ".$request['last_name'];
         $user = User::create($request->all());
 
-        storeMediaFile($user, $request->profile_image, 'profile_image');
+        if ($request->hasFile('profile_image')) {
+            storeMediaFile($user, $request->profile_image, 'profile_image');
+        }
 
         $user->assignRole($request->user_type);
 

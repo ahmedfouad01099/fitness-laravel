@@ -25,20 +25,20 @@
 
                             <!-- Email Address -->
                             <div class="form-group">
-                                {{ Form::label('email',__('message.email').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
-                                {{ Form::email('email',old('email') ?? $request->email,['placeholder' => __('message.email'),'class' =>'form-control', 'required', 'autofocus']) }}
+                                <label class="form-control-label">{{ __('message.email') }} <span class="text-danger">*</span></label>
+                                <input type="email" name="email" value="{{ old('email') ?? $request->email }}" placeholder="{{ __('message.email') }}" class="form-control" required autofocus>
                             </div>
 
                             <!-- Password -->
                             <div class="form-group">
-                                {{ Form::label('password',__('message.password').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
-                                {{ Form::password('password', ['class' => 'form-control', 'placeholder' => __('message.password'), 'required']) }}
+                                <label class="form-control-label">{{ __('message.password') }} <span class="text-danger">*</span></label>
+                                <input type="password" name="password" class="form-control" placeholder="{{ __('message.password') }}" required>
                             </div>
 
                             <!-- Confirm Password -->
                             <div class="form-group">
-                                {{ Form::label('password_confirmation',__('auth.password_confirmation').' <span class="text-danger">*</span>', ['class' => 'form-control-label'],false) }}
-                                {{ Form::password('password_confirmation', ['class' => 'form-control', 'placeholder' => __('auth.password_confirmation'), 'required']) }}
+                                <label class="form-control-label">{{ __('auth.password_confirmation') }} <span class="text-danger">*</span></label>
+                                <input type="password" name="password_confirmation" class="form-control" placeholder="{{ __('auth.password_confirmation') }}" required>
                             </div>
 
                             <button class="btn btn-primary">

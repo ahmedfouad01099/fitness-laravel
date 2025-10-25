@@ -14,46 +14,47 @@
 		</div>
 		<div class="col-md-9">
 			<div class="user-content">
-				{{ Form::model($user_data, ['route' => 'updateProfile', 'method' => 'POST', 'data-toggle'=> 'validator' , 'enctype'=> 'multipart/form-data','id' => 'user-form']) }}
-					
-				    {{ Form::hidden('id', null, [ 'placeholder' => 'id','class' => 'form-control' ]) }}
+				<form action="{{ route('updateProfile') }}" method="POST" data-toggle="validator" enctype="multipart/form-data" id="user-form">
+				@csrf
+				    <input type="hidden" name="id" value="{{ $user_data->id ?? '' }}" placeholder="id" class="form-control">
 				    <div class="row ">
 						<div class="form-group col-md-6">
-							{{ Form::label('first_name',__('message.first_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-							{{ Form::text('first_name',old('first_name'),['placeholder' => __('message.first_name'),'class' =>'form-control','required']) }}
+							<label class="form-control-label">{{ __('message.first_name') }} <span class="text-danger">*</span></label>
+							<input type="text" name="first_name" value="{{ old('first_name', $user_data->first_name ?? '') }}" placeholder="{{ __('message.first_name') }}" class="form-control" required>
 						</div>
 						
 						<div class="form-group col-md-6">
-							{{ Form::label('last_name',__('message.last_name').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-							{{ Form::text('last_name',old('last_name'),['placeholder' => __('message.last_name'),'class' =>'form-control','required']) }}
+							<label class="form-control-label">{{ __('message.last_name') }} <span class="text-danger">*</span></label>
+							<input type="text" name="last_name" value="{{ old('last_name', $user_data->last_name ?? '') }}" placeholder="{{ __('message.last_name') }}" class="form-control" required>
 						</div>
 						
 						<div class="form-group col-md-6">
-							{{ Form::label('username',__('message.username').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-							{{ Form::text('username',old('username'),['placeholder' => __('message.username'),'class' =>'form-control','required']) }}
+							<label class="form-control-label">{{ __('message.username') }} <span class="text-danger">*</span></label>
+							<input type="text" name="username" value="{{ old('username', $user_data->username ?? '') }}" placeholder="{{ __('message.username') }}" class="form-control" required>
 						</div>
 
 						<div class="form-group col-md-6">
-							{{ Form::label('email',__('message.email').' <span class="text-danger">*</span>',['class'=>'form-control-label'], false ) }}
-							{{ Form::email('email',old('email'),['placeholder' => __('message.email'),'class' =>'form-control','required']) }}
+							<label class="form-control-label">{{ __('message.email') }} <span class="text-danger">*</span></label>
+							<input type="email" name="email" value="{{ old('email', $user_data->email ?? '') }}" placeholder="{{ __('message.email') }}" class="form-control" required>
 						</div>
 
 				        <div class="form-group col-md-6">
-							{{ Form::label('phone_number',__('message.phone_number').' <span class="text-danger">*</span>',[ 'class' => 'form-control-label'], false ) }}
-							{{ Form::text('phone_number', old('phone_number'),[ 'placeholder' => __('message.phone_number'), 'class' => 'form-control','required' ]) }}
+							<label class="form-control-label">{{ __('message.phone_number') }} <span class="text-danger">*</span></label>
+							<input type="text" name="phone_number" value="{{ old('phone_number', $user_data->phone_number ?? '') }}" placeholder="{{ __('message.phone_number') }}" class="form-control" required>
 						</div>
 
 				        <div class="form-group col-md-6">
-							{{ Form::label('profile_image',__('message.choose_profile_image'),['class'=>'form-control-label col-md-12'] ) }}
+							<label class="form-control-label col-md-12">{{ __('message.choose_profile_image') }}</label>
 							<div class="">
-								{{ Form::file('profile_image', ['class' => 'form-control' , 'id'=> 'profile_image', 'accept'=> "image/*" ]) }}
+								<input type="file" name="profile_image" class="form-control" id="profile_image" accept="image/*">
 							</div> 
 				        </div>
 
 				        <div class="col-md-12">
-							{{ Form::submit(__('message.update'), ['class'=> 'btn btn-md btn-primary float-md-end']) }}
+							<button type="submit" class="btn btn-md btn-primary float-md-end">{{ __('message.update') }}</button>
 				        </div>
 				    </div>
+				</form>
 			</div>
 		</div>
     </div>

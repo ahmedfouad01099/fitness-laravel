@@ -1,7 +1,7 @@
-{{ Form::model($settings, ['method' => 'POST','route' => [ 'settingsUpdates' ], 'enctype' => 'multipart/form-data', 'data-toggle' => 'validator' ]) }}
-
-{{ Form::hidden('id', null, [ 'placeholder' => 'id', 'class' => 'form-control' ]) }}
-{{ Form::hidden('page', $page, [ 'class' => 'form-control' ]) }}
+<form action="{{ route('settingsUpdates') }}" method="POST" enctype="multipart/form-data" data-toggle="validator">
+@csrf
+<input type="hidden" name="id" value="{{ $settings->id ?? '' }}" placeholder="id" class="form-control">
+<input type="hidden" name="page" value="{{ $page }}" class="form-control">
 <div class="row">
     <div class="col-lg-6"> 
         <div class="form-group">
@@ -152,36 +152,36 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('site_name',__('message.site_name'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.site_name') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('site_name', null, ['class'=>"form-control" ,'placeholder'=> __('message.site_name') ]) }}
+                <input type="text" name="site_name" value="{{ old('site_name', $settings->site_name ?? '') }}" class="form-control" placeholder="{{ __('message.site_name') }}">
             </div>
         </div>
         
         <div class="form-group">
-            {{ Form::label('site_description',__('message.site_description'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.site_description') }}</label>
             <div class="col-sm-12">
-                {{ Form::textarea('site_description', null, ['class'=>"form-control textarea" , 'rows'=>3  , 'placeholder'=> __('message.site_description')]) }}
+                <textarea name="site_description" class="form-control textarea" rows="3" placeholder="{{ __('message.site_description') }}">{{ old('site_description', $settings->site_description ?? '') }}</textarea>
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('contact_email',__('message.contact_email'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.contact_email') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('contact_email', null, ['class'=>"form-control" ,'placeholder'=> __('message.contact_email') ]) }}
+                <input type="text" name="contact_email" value="{{ old('contact_email', $settings->contact_email ?? '') }}" class="form-control" placeholder="{{ __('message.contact_email') }}">
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('contact_number',__('message.contact_number'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.contact_number') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('contact_number', null, ['class'=>"form-control" ,'placeholder'=> __('message.contact_number') ]) }}
+                <input type="text" name="contact_number" value="{{ old('contact_number', $settings->contact_number ?? '') }}" class="form-control" placeholder="{{ __('message.contact_number') }}">
             </div>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="form-group">
-            {{ Form::label('default_language',__('message.default_language'), ['class' => 'col-sm-12  form-control-label']) }}
+            <label class="col-sm-12 form-control-label">{{ __('message.default_language') }}</label>
             <div class="col-sm-12">
                 <select class="form-control select2js default_language" name="env[DEFAULT_LANGUAGE]" id="default_language">
                     @foreach(languagesArray() as $language)
@@ -191,7 +191,7 @@
             </div>
         </div>
         <div class="form-group">
-            {{ Form::label('language_option',__('message.language_option'), ['class' => 'col-sm-12  form-control-label']) }}
+            <label class="col-sm-12 form-control-label">{{ __('message.language_option') }}</label>
             <div class="col-sm-12">
                 <select class="form-control select2js language_option" name="language_option[]" id="language_option" multiple>
                     @foreach(languagesArray() as $language)
@@ -206,43 +206,43 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('facebook_url', __('message.facebook_url'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.facebook_url') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('facebook_url', null, ['class'=>"form-control", 'placeholder' => __('message.enter_name', [ 'name' => __('message.facebook_url') ]) ]) }}
+                <input type="text" name="facebook_url" value="{{ old('facebook_url', $settings->facebook_url ?? '') }}" class="form-control" placeholder="{{ __('message.enter_name', [ 'name' => __('message.facebook_url') ]) }}">
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('twitter_url',__('message.twitter_url'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.twitter_url') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('twitter_url', null, ['class'=>"form-control", 'placeholder' => __('message.enter_name',[ 'name' => __('message.twitter_url') ]) ]) }}
+                <input type="text" name="twitter_url" value="{{ old('twitter_url', $settings->twitter_url ?? '') }}" class="form-control" placeholder="{{ __('message.enter_name',[ 'name' => __('message.twitter_url') ]) }}">
             </div>
         </div>
         
         <div class="form-group">
-            {{ Form::label('linkedin_url',__('message.linkedin_url'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.linkedin_url') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('linkedin_url', null, ['class'=>"form-control", 'placeholder' => __('message.enter_name',[ 'name' => __('message.linkedin_url') ]) ]) }}
+                <input type="text" name="linkedin_url" value="{{ old('linkedin_url', $settings->linkedin_url ?? '') }}" class="form-control" placeholder="{{ __('message.enter_name',[ 'name' => __('message.linkedin_url') ]) }}">
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('instagram_url',__('message.instagram_url'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.instagram_url') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('instagram_url', null, ['class'=>"form-control", 'placeholder' => __('message.enter_name',[ 'name' => __('message.instagram_url') ]) ]) }}
+                <input type="text" name="instagram_url" value="{{ old('instagram_url', $settings->instagram_url ?? '') }}" class="form-control" placeholder="{{ __('message.enter_name',[ 'name' => __('message.instagram_url') ]) }}">
             </div>
         </div>
         
         <div class="form-group">
-            {{ Form::label('copyright_text',__('message.copyright_text'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.copyright_text') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('site_copyright', null, ['class'=>"form-control", 'placeholder' =>__('message.copyright_text')]) }}
+                <input type="text" name="site_copyright" value="{{ old('site_copyright', $settings->site_copyright ?? '') }}" class="form-control" placeholder="{{ __('message.copyright_text') }}">
             </div>
         </div>
         <div class="form-group">
-            {{ Form::label('help_support_url', __('message.help_support_url'), ['class' => 'col-sm-6  form-control-label']) }}
+            <label class="col-sm-6 form-control-label">{{ __('message.help_support_url') }}</label>
             <div class="col-sm-12">
-                {{ Form::text('help_support_url', null, ['class'=>"form-control", 'placeholder' => __('message.enter_name', [ 'name' => __('message.help_support_url') ]) ]) }}
+                <input type="text" name="help_support_url" value="{{ old('help_support_url', $settings->help_support_url ?? '') }}" class="form-control" placeholder="{{ __('message.enter_name', [ 'name' => __('message.help_support_url') ]) }}">
             </div>
         </div>
     </div>
@@ -250,12 +250,12 @@
     <div class="col-lg-12"> 
         <div class="form-group">
             <div class="col-md-offset-3 col-sm-12 ">
-                {{ Form::submit(__('message.save'), ['class'=> 'btn btn-md btn-primary float-md-end']) }}
+                <button type="submit" class="btn btn-md btn-primary float-md-end">{{ __('message.save') }}</button>
             </div>
         </div>
     </div>
 </div>
-{{ Form::close() }}
+</form>
 <script>
     function getExtension(filename) {
         var parts = filename.split('.');

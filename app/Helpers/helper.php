@@ -104,19 +104,22 @@ function checkRecordExist($table_list, $column_name, $id)
 // Model file save to storage by spatie media library
 function storeMediaFile($model, $file, $name)
 {
+    if (!$file) {
+        return true;
+    }
+    
     \Log::debug('Attempting to add media from path: ' . $file);
     if (!file_exists($file)) {
         throw new \Exception("File does not exist at path: {$file}");
     }
-    if ($file) {
-        $model->clearMediaCollection($name);
-        if (is_array($file)) {
-            foreach ($file as $key => $value) {
-                $model->addMedia($value)->toMediaCollection($name);
-            }
-        } else {
-            $model->addMedia($file)->toMediaCollection($name);
+    
+    $model->clearMediaCollection($name);
+    if (is_array($file)) {
+        foreach ($file as $key => $value) {
+            $model->addMedia($value)->toMediaCollection($name);
         }
+    } else {
+        $model->addMedia($file)->toMediaCollection($name);
     }
     return true;
 }

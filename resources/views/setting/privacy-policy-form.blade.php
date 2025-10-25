@@ -25,16 +25,17 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    {{ Form::model($setting_data,['method' => 'POST', 'route' => 'pages.privacy_policy_save', 'data-toggle' => 'validator' ] ) }}
-                        {{ Form::hidden('id') }}
+                    <form action="{{ route('pages.privacy_policy_save') }}" method="POST" data-toggle="validator">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $setting_data->id ?? '' }}">
                         <div class="row">
                             <div class="form-group col-md-12">
-                                {{ Form::label('privacy_policy',__('message.privacy_policy'), ['class' => 'form-control-label']) }}
-                                {{ Form::textarea('value', null, ['class'=> 'form-control tinymce-privacy_policy', 'placeholder'=> __('message.privacy_policy') ]) }}
+                                <label class="form-control-label">{{ __('message.privacy_policy') }}</label>
+                                <textarea name="value" class="form-control tinymce-privacy_policy" placeholder="{{ __('message.privacy_policy') }}">{{ old('value', $setting_data->value ?? '') }}</textarea>
                             </div>
                         </div>
-                        {{ Form::submit( __('message.save'), ['class' => 'btn btn-md btn-primary float-end']) }}
-                    {{ Form::close() }}
+                        <button type="submit" class="btn btn-md btn-primary float-end">{{ __('message.save') }}</button>
+                    </form>
                 </div>
             </div>
         </div>

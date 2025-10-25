@@ -1,30 +1,31 @@
-{{ Form::model($user_data, ['route'=>'changePassword','method' => 'POST','data-toggle' => 'validator','id' => 'user-password']) }}
+<form action="{{ route('changePassword') }}" method="POST" data-toggle="validator" id="user-password">
+    @csrf
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            {{ Form::hidden('id', null, [ 'placeholder' => 'id', 'class' => 'form-control'] ) }}
+            <input type="hidden" name="id" value="{{ $user_data->id ?? '' }}" placeholder="id" class="form-control">
             <div class="form-group has-feedback">
-                {{ Form::label('old_password',__('message.old_password').' <span class="text-danger">*</span>',['class'=>'form-control-label col-md-12'], false ) }}
+                <label class="form-control-label col-md-12">{{ __('message.old_password') }} <span class="text-danger">*</span></label>
                 <div class="col-md-12">
-                    {{ Form::password('old', ['class'=> 'form-control', 'id' => 'old_password' , 'placeholder' => __('message.old_password') ,'required']) }}
+                    <input type="password" name="old" class="form-control" id="old_password" placeholder="{{ __('message.old_password') }}" required>
                 </div>
             </div>
             <div class="form-group has-feedback">
-                {{ Form::label('password',__('message.new_password').' <span class="text-danger">*</span>',['class'=>'form-control-label col-md-12'], false ) }}
+                <label class="form-control-label col-md-12">{{ __('message.new_password') }} <span class="text-danger">*</span></label>
                 <div class="col-md-12">
-                    {{ Form::password('password', ['class'=> 'form-control' , 'id'=> 'password', 'placeholder' => __('message.new_password') ,'required']) }}
+                    <input type="password" name="password" class="form-control" id="password" placeholder="{{ __('message.new_password') }}" required>
                 </div>
             </div>
             <div class="form-group has-feedback">
-                {{ Form::label('password-confirm',__('message.confirm_new_password').' <span class="text-danger">*</span>',['class' => 'form-control-label col-md-12'], false ) }}
+                <label class="form-control-label col-md-12">{{ __('message.confirm_new_password') }} <span class="text-danger">*</span></label>
                 <div class="col-md-12">
-                    {{ Form::password('password_confirmation', ['class'=> 'form-control' , 'id' => 'password-confirm', 'placeholder' => __('message.confirm_new_password') ,'required']) }}
+                    <input type="password" name="password_confirmation" class="form-control" id="password-confirm" placeholder="{{ __('message.confirm_new_password') }}" required>
                 </div>
             </div>
             <div class="form-group ">
                 <div class="col-md-12">
-                    {{ Form::submit(__('message.save'), ['id'=>"submit" ,'class'=>"btn btn-md btn-primary float-md-end mt-15"]) }}
+                    <button type="submit" id="submit" class="btn btn-md btn-primary float-md-end mt-15">{{ __('message.save') }}</button>
                 </div>
             </div>
         </div>
     </div>
-{{ Form::close() }}
+</form>

@@ -1,6 +1,7 @@
-{{ Form::model($setting_value, ['method' => 'POST','route' => ['settingUpdate'],'data-toggle'=>'validator']) }}
-    {{ Form::hidden('id', null, ['class' => 'form-control'] ) }}
-    {{ Form::hidden('page', $page, ['class' => 'form-control'] ) }}
+<form action="{{ route('settingUpdate') }}" method="POST" data-toggle="validator">
+    @csrf
+    <input type="hidden" name="id" value="{{ $setting_value->id ?? '' }}" class="form-control">
+    <input type="hidden" name="page" value="{{ $page }}" class="form-control">
     <div class="row">
         @foreach($setting as $key => $value)
             <div class="col-md-12 col-sm-12 card shadow mb-10">
@@ -36,7 +37,7 @@
                             <div class=" {{ $class }} col-sm-12">
                                 <div class="form-group">
                                     <label for="{{ $key.'_'.$sub_keys }}">{{ str_replace('_',' ',$sub_keys) }} {!! $sub_keys == 'TIME' ? '<span data-toggle="tooltip" title="'.__('message.set_quote_time', ['timezone' => config('app.timezone') ]).'">&#9432;</span>' : '' !!}</label>
-                                    {{ Form::hidden('type[]', $key , ['class' => 'form-control'] ) }}
+                                    <input type="hidden" name="type[]" value="{{ $key }}" class="form-control">
                                     <input type="hidden" name="key[]" value="{{ $key.'_'.$sub_keys }}">
                                     @if($key == 'CURRENCY' && $sub_keys == 'CODE')
                                         @php
@@ -49,7 +50,10 @@
                                             @endforeach
                                         </select>
                                     @elseif($key == 'CURRENCY' && $sub_keys == 'POSITION')
-                                        {{ Form::select('value[]',['left' => __('message.left') , 'right' => __('message.right') ], isset($data) ? $data->value : 'left',[ 'class' =>'form-control select2js']) }}
+                                        <select name="value[]" class="form-control select2js">
+                                            <option value="left" {{ (isset($data) && $data->value == 'left') ? 'selected' : '' }}>{{ __('message.left') }}</option>
+                                            <option value="right" {{ (isset($data) && $data->value == 'right') ? 'selected' : '' }}>{{ __('message.right') }}</option>
+                                        </select>
                                     @elseif($key == 'QUOTE' && $sub_keys == 'TIME')
                                         <input type="{{ $type }}" name="value[]" value="{{ isset($data) ? $data->value : null }}" id="{{ $key.'_'.$sub_keys }}" class="form-control form-control-lg timepicker24" placeholder="{{ str_replace('_',' ',$sub_keys) }}">
                                     @else
@@ -59,15 +63,15 @@
                             </div>
                         @endforeach
                         <div class="col-md-12">
-                            {{ Form::submit(__('message.save'), ['class'=> 'btn btn-md btn-primary float-md-end']) }}
+                            <button type="submit" class="btn btn-md btn-primary float-md-end">{{ __('message.save') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
         @endForeach
     </div>
-{{ Form::submit(__('message.save'), [ 'class' => 'btn btn-md btn-primary float-md-end']) }}
-{{ Form::close() }}
+<button type="submit" class="btn btn-md btn-primary float-md-end">{{ __('message.save') }}</button>
+</form>
 
 <script>
     $(document).ready(function() {
