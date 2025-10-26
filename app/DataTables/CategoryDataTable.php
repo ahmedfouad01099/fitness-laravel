@@ -36,7 +36,7 @@ class CategoryDataTable extends DataTable
             })
             ->addColumn('action', function($category){
                 $id = $category->id;
-                return view('category.action',compact('category','id'))->render();
+                return view('postcategory.action',compact('category','id'))->render();
             })
             ->addIndexColumn()
             ->rawColumns(['action','status']);

@@ -24,7 +24,7 @@ class TagsDataTable extends DataTable
 
             ->addColumn('action', function($tags){
                 $id = $tags->id;
-                return view('tags.action',compact('tags','id'))->render();
+                return view('posttags.action',compact('tags','id'))->render();
             })
             ->addIndexColumn()
             ->rawColumns(['action','status']);

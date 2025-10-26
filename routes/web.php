@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\BodyPartController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostCategoryController;
 use App\Http\Controllers\CategoryDietController;
 use App\Http\Controllers\DietController;
 use App\Http\Controllers\EquipmentController;
@@ -18,7 +18,7 @@ use App\Http\Controllers\QuotesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\TagsController;
+use App\Http\Controllers\PostTagsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutTypeController;
@@ -52,8 +52,8 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::resource('product', ProductController::class);
     Route::resource('productcategory', ProductCategoryController::class);
     Route::resource('post', PostController::class);
-    Route::resource('category', CategoryController::class);
-    Route::resource('tags', TagsController::class);
+    Route::resource('category', PostCategoryController::class);
+    Route::resource('tags', PostTagsController::class);
     Route::resource('package', PackageController::class);
     Route::resource('subscription', SubscriptionController::class);
 

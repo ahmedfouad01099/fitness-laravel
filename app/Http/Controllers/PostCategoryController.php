@@ -7,10 +7,10 @@ use App\DataTables\CategoryDataTable;
 use App\Helpers\AuthHelper;
 use App\Models\Category;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\PostCategoryRequest;
 
 
-class CategoryController extends Controller
+class PostCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class CategoryController extends Controller
     {
         $pageTitle = __('message.add_form_title',[ 'form' => __('message.category')]);
 
-        return view('category.form', compact('pageTitle'));
+        return view('postcategory.form', compact('pageTitle'));
     }
     /**
      * Store a newly created resource in storage.
@@ -45,7 +45,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(PostCategoryRequest $request)
     {
         $category = Category::create($request->all());
 
@@ -76,7 +76,7 @@ class CategoryController extends Controller
         $data = Category::findOrFail($id);
         $pageTitle = __('message.update_form_title',[ 'form' => __('message.category') ]);
 
-        return view('category.form', compact('data','id','pageTitle'));
+        return view('postcategory.form', compact('data','id','pageTitle'));
     }
 
     /**
@@ -86,7 +86,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(PostCategoryRequest $request, $id)
     {
         $category = Category::findOrFail($id);
 

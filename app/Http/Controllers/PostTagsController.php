@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\DataTables\TagsDataTable;
 use App\Models\Tags;
 use App\Helpers\AuthHelper;
-use App\Http\Requests\TagsRequest;
+use App\Http\Requests\PostTagsRequest;
 
-class TagsController extends Controller
+class PostTagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,7 @@ class TagsController extends Controller
     {
         $pageTitle = __('message.add_form_title',[ 'form' => __('message.tags')]);
 
-        return view('tags.form', compact('pageTitle'));
+        return view('posttags.form', compact('pageTitle'));
     }
     /**
      * Store a newly created resource in storage.
@@ -43,7 +43,7 @@ class TagsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TagsRequest $request)
+    public function store(PostTagsRequest $request)
     {
         $tags = Tags::create($request->all());
 
@@ -74,7 +74,7 @@ class TagsController extends Controller
         $data = Tags::findOrFail($id);
         $pageTitle = __('message.update_form_title',[ 'form' => __('message.tags') ]);
 
-        return view('tags.form', compact('data','id','pageTitle'));
+        return view('posttags.form', compact('data','id','pageTitle'));
     }
 
     /**
@@ -84,7 +84,7 @@ class TagsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TagsRequest $request, $id)
+    public function update(PostTagsRequest $request, $id)
     {
         $tags = Tags::findOrFail($id);
 
