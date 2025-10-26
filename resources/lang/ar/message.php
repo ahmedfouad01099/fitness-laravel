@@ -15,6 +15,7 @@ return [
     'delete_alert' => 'هل أنت متأكد أنك تريد حذف هذا :form؟',
     'add_button_form' => 'إضافة جديد :form',
     'select_name' => 'حدد :select',
+    'select_status' => 'حدد الحالة',
     'remove_file_title' => 'إزالة :name',
     'login_success' => 'تسجيل الدخول بنجاح',
     'msg_removed' => 'تمت إزالة :name بنجاح.',

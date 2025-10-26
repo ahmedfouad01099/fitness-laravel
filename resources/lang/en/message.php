@@ -15,6 +15,7 @@ return [
     'delete_alert' => 'Are you sure you want to delete this :form?',
     'add_button_form' => 'Add New :form',
     'select_name' => 'Select :select',
+    'select_status' => 'Select Status',
     'remove_file_title' => 'Remove :name',
     'login_success' => 'Login successfully',
     'msg_removed' => ':name has been removed successfully.',

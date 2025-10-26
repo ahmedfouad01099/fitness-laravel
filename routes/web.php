@@ -29,7 +29,7 @@ require __DIR__ . '/auth.php';
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('language/{locale}', [ HomeController::class, 'changeLanguage'])->name('change.language');
+Route::get('language/{locale}', [HomeController::class, 'changeLanguage'])->name('change.language');
 
 Route::group(['middleware' => ['auth', 'useractive']], function () {
     // Permission Module
@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('changeStatus', [HomeController::class, 'changeStatus'])->name('changeStatus');
 });
+Route::get('/ajax-list', [HomeController::class, 'getAjaxList'])->name('ajax-list');
 
 
 //Auth pages Routs
