@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::get('pages/term-condition', [SettingController::class, 'termAndCondition'])->name('pages.term_condition');
     Route::post('term-condition-save', [SettingController::class, 'saveTermAndCondition'])->name('pages.term_condition_save');
     Route::get('pages/privacy-policy', [SettingController::class, 'privacyPolicy'])->name('pages.privacy_policy');
+    Route::post('privacy-policy-save',[ SettingController::class, 'savePrivacyPolicy'])->name('pages.privacy_policy_save');
     Route::get('setting/{page?}', [SettingController::class, 'settings'])->name('setting.index');
     Route::post('layout-page', [SettingController::class, 'layoutPage'])->name('layout_page');
     Route::post('settings/save', [SettingController::class, 'settingsUpdates'])->name('settingsUpdates');
