@@ -42,6 +42,8 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::resource('equipment', EquipmentController::class);
     Route::resource('exercise', ExerciseController::class);
     Route::resource('workout', WorkoutController::class);
+    Route::post('workoutdays-exercise-delete', [ WorkoutController::class , 'workoutDaysExerciseDelete'])->name('workoutdays.exercise.delete');
+
     Route::resource('workouttype', WorkoutTypeController::class);
     Route::resource('diet', DietController::class);
     Route::resource('categorydiet', CategoryDietController::class);
