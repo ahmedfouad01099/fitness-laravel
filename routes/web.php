@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BodyPartController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PostCategoryController;
 use App\Http\Controllers\CategoryDietController;
 use App\Http\Controllers\DietController;
@@ -9,13 +10,13 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PackageController;
-use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\QuotesController;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Security\PermissionController;
+use App\Http\Controllers\Security\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PostTagsController;
@@ -42,7 +43,7 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::resource('equipment', EquipmentController::class);
     Route::resource('exercise', ExerciseController::class);
     Route::resource('workout', WorkoutController::class);
-    Route::post('workoutdays-exercise-delete', [ WorkoutController::class , 'workoutDaysExerciseDelete'])->name('workoutdays.exercise.delete');
+    Route::post('workoutdays-exercise-delete', [WorkoutController::class, 'workoutDaysExerciseDelete'])->name('workoutdays.exercise.delete');
 
     Route::resource('workouttype', WorkoutTypeController::class);
     Route::resource('diet', DietController::class);
@@ -63,13 +64,15 @@ Route::group(['middleware' => ['auth', 'useractive']], function () {
     Route::get('pages/term-condition', [SettingController::class, 'termAndCondition'])->name('pages.term_condition');
     Route::post('term-condition-save', [SettingController::class, 'saveTermAndCondition'])->name('pages.term_condition_save');
     Route::get('pages/privacy-policy', [SettingController::class, 'privacyPolicy'])->name('pages.privacy_policy');
-    Route::post('privacy-policy-save',[ SettingController::class, 'savePrivacyPolicy'])->name('pages.privacy_policy_save');
+    Route::post('privacy-policy-save', [SettingController::class, 'savePrivacyPolicy'])->name('pages.privacy_policy_save');
     Route::get('setting/{page?}', [SettingController::class, 'settings'])->name('setting.index');
     Route::post('layout-page', [SettingController::class, 'layoutPage'])->name('layout_page');
     Route::post('settings/save', [SettingController::class, 'settingsUpdates'])->name('settingsUpdates');
     Route::post('mobile-config-save', [SettingController::class, 'settingUpdate'])->name('settingUpdate');
     Route::post('env-setting', [SettingController::class, 'envChanges'])->name('envSetting');
     Route::post('payment-settings/save', [SettingController::class, 'paymentSettingsUpdate'])->name('paymentSettingsUpdate');
+    Route::post('get-lang-file', [LanguageController::class, 'getFile'])->name('getLanguageFile');
+    Route::post('save-lang-file', [LanguageController::class, 'saveFileContent'])->name('saveLangContent');
 
 
 

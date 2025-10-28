@@ -59,8 +59,8 @@ class Role extends Model implements RoleContract
         return $this->belongsToMany(
             config('permission.models.permission'),
             config('permission.table_names.role_has_permissions'),
-            PermissionRegistrar::$pivotRole,
-            PermissionRegistrar::$pivotPermission
+            'role_id',
+            'permission_id'
         );
     }
 
@@ -137,17 +137,18 @@ class Role extends Model implements RoleContract
 
     protected static function findByParam(array $params = [])
     {
-        $query = static::when(PermissionRegistrar::$teams, function ($q) use ($params) {
+        $query = static::when(false, function ($q) use ($params) {
             $q->where(function ($q) use ($params) {
-                $q->whereNull(PermissionRegistrar::$teamsKey)
-                    ->orWhere(PermissionRegistrar::$teamsKey, $params[PermissionRegistrar::$teamsKey] ?? app(PermissionRegistrar::class)->getPermissionsTeamId());
+                $q->whereNull('team_id')
+                    ->orWhere('team_id', $params['team_id'] ?? null);
             });
         });
-        unset($params[PermissionRegistrar::$teamsKey]);
+
+        unset($params['team_id']);
+
         foreach ($params as $key => $value) {
             $query->where($key, $value);
         }
-
         return $query->first();
     }
 
